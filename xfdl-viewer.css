@@ -1,0 +1,144 @@
+:root {
+  --page: #eef2f7;
+  --panel: #ffffff;
+  --line: #d9e1ea;
+  --text: #172033;
+  --muted: #667085;
+  --accent: #0f766e;
+  --danger: #b42318;
+  --warning: #b7791f;
+  --ok: #15803d;
+  font-family: "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+}
+
+#loading {
+  padding: 24px;
+  color: var(--muted);
+}
+
+#app {
+  width: 1280px;
+  min-height: 1120px;
+  margin: 0 auto;
+  position: relative;
+  transform-origin: top center;
+}
+
+.xfdl-form,
+.xfdl-div {
+  position: absolute;
+}
+
+.xfdl-form {
+  width: 1280px;
+  height: 1120px;
+  background: var(--page);
+}
+
+.xfdl-static,
+.xfdl-combo,
+.xfdl-calendar,
+.xfdl-button,
+.xfdl-grid,
+.xfdl-chart {
+  position: absolute;
+}
+
+.xfdl-static {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.xfdl-combo,
+.xfdl-calendar {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: var(--text);
+  padding: 0 8px;
+  border-radius: 4px;
+}
+
+.xfdl-button {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.xfdl-button.primary {
+  border-color: #115e59;
+  background: var(--accent);
+  color: #fff;
+}
+
+.xfdl-grid {
+  overflow: auto;
+  background: #fff;
+}
+
+.xfdl-grid table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.xfdl-grid th,
+.xfdl-grid td {
+  height: 28px;
+  padding: 6px 8px;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.xfdl-grid th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+}
+
+.state-normal {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.state-warn {
+  color: var(--warning);
+  font-weight: 700;
+}
+
+.state-stop {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.xfdl-chart {
+  background: #fff;
+}
+
+.viewer-note {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .94);
+  color: var(--muted);
+  border-radius: 6px;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
+}

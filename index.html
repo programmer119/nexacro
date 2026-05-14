@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>제조 설비 모니터링</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>제조 설비 모니터링</h1>
+        <p>레거시 생산 데이터 연동 현황</p>
+      </div>
+      <div class="session">
+        <span class="status-dot"></span>
+        <span>Oracle 연동 정상</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="query-panel" aria-label="조회 조건">
+        <label>
+          공장
+          <select id="plantFilter">
+            <option value="ALL">전체</option>
+            <option value="GEOJE-1">거제 1공장</option>
+            <option value="GEOJE-2">거제 2공장</option>
+          </select>
+        </label>
+        <label>
+          라인
+          <select id="lineFilter">
+            <option value="ALL">전체</option>
+            <option value="A">A라인</option>
+            <option value="B">B라인</option>
+            <option value="C">C라인</option>
+          </select>
+        </label>
+        <label>
+          상태
+          <select id="stateFilter">
+            <option value="ALL">전체</option>
+            <option value="정상">정상</option>
+            <option value="주의">주의</option>
+            <option value="정지">정지</option>
+          </select>
+        </label>
+        <label>
+          기준일
+          <input id="baseDate" type="date">
+        </label>
+        <button id="searchBtn" type="button">조회</button>
+        <button id="resetBtn" class="ghost" type="button">초기화</button>
+      </section>
+
+      <section class="kpi-grid" aria-label="주요 지표">
+        <article>
+          <span>가동률</span>
+          <strong id="kpiRunRate">0%</strong>
+        </article>
+        <article>
+          <span>생산량</span>
+          <strong id="kpiOutput">0</strong>
+        </article>
+        <article>
+          <span>불량률</span>
+          <strong id="kpiDefect">0%</strong>
+        </article>
+        <article>
+          <span>미확인 알람</span>
+          <strong id="kpiAlarm">0</strong>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>시간대별 생산 추이</h2>
+            <span id="chartSummary"></span>
+          </div>
+          <canvas id="trendChart" width="900" height="300" aria-label="생산 추이 차트"></canvas>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>라인 상태</h2>
+            <span id="stateSummary"></span>
+          </div>
+          <div id="lineStatus" class="line-status"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>설비별 실시간 현황</h2>
+          <span id="gridCount"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>공장</th>
+                <th>라인</th>
+                <th>설비 ID</th>
+                <th>설비명</th>
+                <th>상태</th>
+                <th>가동률</th>
+                <th>생산량</th>
+                <th>불량</th>
+                <th>최종 수집</th>
+              </tr>
+            </thead>
+            <tbody id="equipmentRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>최근 알람</h2>
+          <span>레거시 설비 이벤트 수집</span>
+        </div>
+        <div id="alarmList" class="alarm-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="frmMonitoringDashboard" width="1280" height="1120" titletext="제조 설비 모니터링" onload="frmMonitoringDashboard_onload">
+    <Layouts>
+      <Layout height="1120" mobileorientation="landscape" width="1280">
+        <Div id="divHeader" taborder="0" text="" left="0" top="0" width="1280" height="64" background="#1F2937">
+          <Layouts>
+            <Layout>
+              <Static id="staTitle" taborder="0" text="제조 설비 모니터링" left="24" top="12" width="240" height="26" color="#FFFFFF" font="bold 18px/normal Malgun Gothic"/>
+              <Static id="staSubTitle" taborder="1" text="레거시 생산 데이터 연동 현황" left="24" top="38" width="260" height="18" color="#CBD5E1" font="12px/normal Malgun Gothic"/>
+              <Static id="staOracleState" taborder="2" text="Oracle 연동 정상" left="1120" top="22" width="130" height="20" color="#DCFCE7" font="bold 12px/normal Malgun Gothic"/>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divSearch" taborder="1" left="20" top="82" width="1240" height="64" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staPlant" taborder="0" text="공장" left="16" top="9" width="48" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Combo id="cboPlant" taborder="1" left="16" top="30" width="150" height="26" innerdataset="dsPlant" codecolumn="code" datacolumn="name"/>
+              <Static id="staLine" taborder="2" text="라인" left="180" top="9" width="48" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Combo id="cboLine" taborder="3" left="180" top="30" width="150" height="26" innerdataset="dsLine" codecolumn="code" datacolumn="name"/>
+              <Static id="staState" taborder="4" text="상태" left="344" top="9" width="48" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Combo id="cboState" taborder="5" left="344" top="30" width="150" height="26" innerdataset="dsState" codecolumn="code" datacolumn="name"/>
+              <Static id="staDate" taborder="6" text="기준일" left="508" top="9" width="56" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Calendar id="calBaseDate" taborder="7" left="508" top="30" width="140" height="26" dateformat="yyyy-MM-dd"/>
+              <Button id="btnSearch" taborder="8" text="조회" left="670" top="30" width="76" height="26" background="#0F766E" color="#FFFFFF" onclick="btnSearch_onclick"/>
+              <Button id="btnReset" taborder="9" text="초기화" left="754" top="30" width="76" height="26" onclick="btnReset_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divKpiRunRate" taborder="2" left="20" top="160" width="296" height="84" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staRunRateLabel" taborder="0" text="가동률" left="16" top="14" width="80" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Static id="staRunRateValue" taborder="1" text="0%" left="16" top="38" width="120" height="34" color="#172033" font="bold 26px/normal Malgun Gothic"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divKpiOutput" taborder="3" left="334" top="160" width="296" height="84" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staOutputLabel" taborder="0" text="생산량" left="16" top="14" width="80" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Static id="staOutputValue" taborder="1" text="0" left="16" top="38" width="160" height="34" color="#172033" font="bold 26px/normal Malgun Gothic"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divKpiDefect" taborder="4" left="648" top="160" width="296" height="84" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staDefectLabel" taborder="0" text="불량률" left="16" top="14" width="80" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Static id="staDefectValue" taborder="1" text="0%" left="16" top="38" width="120" height="34" color="#172033" font="bold 26px/normal Malgun Gothic"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divKpiAlarm" taborder="5" left="962" top="160" width="298" height="84" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staAlarmLabel" taborder="0" text="미확인 알람" left="16" top="14" width="90" height="18" color="#667085" font="bold 12px/normal Malgun Gothic"/>
+              <Static id="staAlarmValue" taborder="1" text="0" left="16" top="38" width="120" height="34" color="#172033" font="bold 26px/normal Malgun Gothic"/>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divTrend" taborder="6" left="20" top="258" width="812" height="246" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staTrendTitle" taborder="0" text="시간대별 생산 추이" left="16" top="12" width="180" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <BasicChart id="chtTrend" taborder="1" left="16" top="46" width="780" height="184" binddataset="dsTrend"/>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divLineState" taborder="7" left="846" top="258" width="414" height="246" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staLineTitle" taborder="0" text="라인 상태" left="16" top="12" width="100" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Grid id="grdLineState" taborder="1" left="16" top="46" width="382" height="184" binddataset="dsLineState">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="80"/>
+                      <Column size="90"/>
+                      <Column size="100"/>
+                      <Column size="110"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28" band="head"/>
+                      <Row size="30"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="라인"/>
+                      <Cell col="1" text="상태"/>
+                      <Cell col="2" text="가동률"/>
+                      <Cell col="3" text="생산량"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:line"/>
+                      <Cell col="1" text="bind:state"/>
+                      <Cell col="2" text="bind:runRate"/>
+                      <Cell col="3" text="bind:output"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divEquipment" taborder="8" left="20" top="518" width="1240" height="186" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staEquipmentTitle" taborder="0" text="설비별 실시간 현황" left="16" top="12" width="180" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Grid id="grdEquipment" taborder="1" left="16" top="46" width="1208" height="124" binddataset="dsEquipment">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="95"/>
+                      <Column size="70"/>
+                      <Column size="110"/>
+                      <Column size="170"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="70"/>
+                      <Column size="110"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28" band="head"/>
+                      <Row size="30"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="공장"/>
+                      <Cell col="1" text="라인"/>
+                      <Cell col="2" text="설비 ID"/>
+                      <Cell col="3" text="설비명"/>
+                      <Cell col="4" text="상태"/>
+                      <Cell col="5" text="가동률"/>
+                      <Cell col="6" text="생산량"/>
+                      <Cell col="7" text="불량"/>
+                      <Cell col="8" text="최종 수집"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:plant"/>
+                      <Cell col="1" text="bind:line"/>
+                      <Cell col="2" text="bind:eqId"/>
+                      <Cell col="3" text="bind:eqName"/>
+                      <Cell col="4" text="bind:state"/>
+                      <Cell col="5" text="bind:runRate"/>
+                      <Cell col="6" text="bind:output"/>
+                      <Cell col="7" text="bind:defect"/>
+                      <Cell col="8" text="bind:collectedAt"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divAlarm" taborder="9" left="20" top="718" width="1240" height="82" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staAlarmTitle" taborder="0" text="최근 알람" left="16" top="10" width="100" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Grid id="grdAlarm" taborder="1" left="16" top="36" width="1208" height="34" binddataset="dsAlarm">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="90"/>
+                      <Column size="80"/>
+                      <Column size="280"/>
+                      <Column size="520"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="30"/>
+                    </Rows>
+                    <Band id="body">
+                      <Cell text="bind:time"/>
+                      <Cell col="1" text="bind:level"/>
+                      <Cell col="2" text="bind:title"/>
+                      <Cell col="3" text="bind:desc"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divLegacyInterface" taborder="10" left="20" top="814" width="610" height="146" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staLegacyTitle" taborder="0" text="사내 레거시 시스템 데이터 연동" left="16" top="10" width="220" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Static id="staLegacyDesc" taborder="1" text="MES / ERP / 설비 게이트웨이 수집 상태" left="240" top="12" width="260" height="18" color="#667085" font="12px/normal Malgun Gothic"/>
+              <Grid id="grdInterfaceLog" taborder="2" left="16" top="40" width="578" height="90" binddataset="dsInterfaceLog">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="110"/>
+                      <Column size="110"/>
+                      <Column size="90"/>
+                      <Column size="90"/>
+                      <Column size="170"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28" band="head"/>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="시스템"/>
+                      <Cell col="1" text="연동 방식"/>
+                      <Cell col="2" text="수집 건수"/>
+                      <Cell col="3" text="상태"/>
+                      <Cell col="4" text="최종 수집"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:systemName"/>
+                      <Cell col="1" text="bind:interfaceType"/>
+                      <Cell col="2" text="bind:recordCount"/>
+                      <Cell col="3" text="bind:state"/>
+                      <Cell col="4" text="bind:lastSync"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divProcessResult" taborder="11" left="648" top="814" width="612" height="146" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staProcessTitle" taborder="0" text="데이터 처리 로직 결과" left="16" top="10" width="180" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Static id="staProcessDesc" taborder="1" text="정제 / 집계 / 임계치 판정 / 알람 생성" left="210" top="12" width="260" height="18" color="#667085" font="12px/normal Malgun Gothic"/>
+              <Grid id="grdProcessResult" taborder="2" left="16" top="40" width="580" height="90" binddataset="dsProcessResult">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="130"/>
+                      <Column size="90"/>
+                      <Column size="90"/>
+                      <Column size="100"/>
+                      <Column size="160"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28" band="head"/>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="처리 단계"/>
+                      <Cell col="1" text="입력"/>
+                      <Cell col="2" text="출력"/>
+                      <Cell col="3" text="결과"/>
+                      <Cell col="4" text="비고"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:stepName"/>
+                      <Cell col="1" text="bind:inputCount"/>
+                      <Cell col="2" text="bind:outputCount"/>
+                      <Cell col="3" text="bind:result"/>
+                      <Cell col="4" text="bind:remark"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+
+        <Div id="divLegacyRaw" taborder="12" left="20" top="974" width="1240" height="126" border="1px solid #D9E1EA" background="#FFFFFF">
+          <Layouts>
+            <Layout>
+              <Static id="staLegacyRawTitle" taborder="0" text="레거시 원천 데이터 수신 샘플" left="16" top="10" width="210" height="22" font="bold 14px/normal Malgun Gothic"/>
+              <Static id="staLegacyRawDesc" taborder="1" text="MES/ERP/설비 Gateway에서 읽어온 원본 필드를 화면용 Dataset으로 매핑" left="240" top="12" width="470" height="18" color="#667085" font="12px/normal Malgun Gothic"/>
+              <Grid id="grdLegacyRaw" taborder="2" left="16" top="40" width="1208" height="70" binddataset="dsLegacyRaw">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="90"/>
+                      <Column size="120"/>
+                      <Column size="110"/>
+                      <Column size="110"/>
+                      <Column size="95"/>
+                      <Column size="90"/>
+                      <Column size="95"/>
+                      <Column size="130"/>
+                      <Column size="250"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28" band="head"/>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="소스"/>
+                      <Cell col="1" text="원천 키"/>
+                      <Cell col="2" text="설비 코드"/>
+                      <Cell col="3" text="태그 코드"/>
+                      <Cell col="4" text="원본 값"/>
+                      <Cell col="5" text="단위"/>
+                      <Cell col="6" text="품질"/>
+                      <Cell col="7" text="수신 시각"/>
+                      <Cell col="8" text="화면 매핑"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:sourceSystem"/>
+                      <Cell col="1" text="bind:legacyKey"/>
+                      <Cell col="2" text="bind:eqCode"/>
+                      <Cell col="3" text="bind:tagCode"/>
+                      <Cell col="4" text="bind:rawValue"/>
+                      <Cell col="5" text="bind:unit"/>
+                      <Cell col="6" text="bind:quality"/>
+                      <Cell col="7" text="bind:receivedAt"/>
+                      <Cell col="8" text="bind:mappedField"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+
+    <Objects>
+      <Dataset id="dsPlant">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="20"/>
+          <Column id="name" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="code">ALL</Col><Col id="name">전체</Col></Row>
+          <Row><Col id="code">GEOJE-1</Col><Col id="name">거제 1공장</Col></Row>
+          <Row><Col id="code">GEOJE-2</Col><Col id="name">거제 2공장</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsLine">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="20"/>
+          <Column id="name" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="code">ALL</Col><Col id="name">전체</Col></Row>
+          <Row><Col id="code">A</Col><Col id="name">A라인</Col></Row>
+          <Row><Col id="code">B</Col><Col id="name">B라인</Col></Row>
+          <Row><Col id="code">C</Col><Col id="name">C라인</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsState">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="20"/>
+          <Column id="name" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="code">ALL</Col><Col id="name">전체</Col></Row>
+          <Row><Col id="code">정상</Col><Col id="name">정상</Col></Row>
+          <Row><Col id="code">주의</Col><Col id="name">주의</Col></Row>
+          <Row><Col id="code">정지</Col><Col id="name">정지</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsEquipment">
+        <ColumnInfo>
+          <Column id="plant" type="STRING" size="20"/>
+          <Column id="line" type="STRING" size="10"/>
+          <Column id="eqId" type="STRING" size="30"/>
+          <Column id="eqName" type="STRING" size="80"/>
+          <Column id="state" type="STRING" size="20"/>
+          <Column id="runRate" type="INT" size="10"/>
+          <Column id="output" type="INT" size="10"/>
+          <Column id="defect" type="INT" size="10"/>
+          <Column id="collectedAt" type="STRING" size="20"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsLineState">
+        <ColumnInfo>
+          <Column id="line" type="STRING" size="10"/>
+          <Column id="state" type="STRING" size="20"/>
+          <Column id="runRate" type="STRING" size="20"/>
+          <Column id="output" type="STRING" size="20"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsTrend">
+        <ColumnInfo>
+          <Column id="hour" type="STRING" size="10"/>
+          <Column id="output" type="INT" size="10"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsAlarm">
+        <ColumnInfo>
+          <Column id="time" type="STRING" size="10"/>
+          <Column id="level" type="STRING" size="20"/>
+          <Column id="title" type="STRING" size="100"/>
+          <Column id="desc" type="STRING" size="200"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsInterfaceLog">
+        <ColumnInfo>
+          <Column id="systemName" type="STRING" size="50"/>
+          <Column id="interfaceType" type="STRING" size="30"/>
+          <Column id="recordCount" type="INT" size="10"/>
+          <Column id="state" type="STRING" size="20"/>
+          <Column id="lastSync" type="STRING" size="30"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsProcessResult">
+        <ColumnInfo>
+          <Column id="stepName" type="STRING" size="80"/>
+          <Column id="inputCount" type="INT" size="10"/>
+          <Column id="outputCount" type="INT" size="10"/>
+          <Column id="result" type="STRING" size="20"/>
+          <Column id="remark" type="STRING" size="120"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsLegacyRaw">
+        <ColumnInfo>
+          <Column id="sourceSystem" type="STRING" size="50"/>
+          <Column id="legacyKey" type="STRING" size="60"/>
+          <Column id="eqCode" type="STRING" size="40"/>
+          <Column id="tagCode" type="STRING" size="40"/>
+          <Column id="rawValue" type="STRING" size="40"/>
+          <Column id="unit" type="STRING" size="20"/>
+          <Column id="quality" type="STRING" size="20"/>
+          <Column id="receivedAt" type="STRING" size="30"/>
+          <Column id="mappedField" type="STRING" size="120"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+
+    <Script type="xscript5.1"><![CDATA[
+this.frmMonitoringDashboard_onload = function(obj, e)
+{
+  this.cboPlant.set_index(0);
+  this.cboLine.set_index(0);
+  this.cboState.set_index(0);
+  this.calBaseDate.set_value(this.gfn_today());
+  this.fnSearch();
+};
+
+this.btnSearch_onclick = function(obj, e)
+{
+  this.fnSearch();
+};
+
+this.btnReset_onclick = function(obj, e)
+{
+  this.cboPlant.set_index(0);
+  this.cboLine.set_index(0);
+  this.cboState.set_index(0);
+  this.calBaseDate.set_value(this.gfn_today());
+  this.fnSearch();
+};
+
+this.fnSearch = function()
+{
+  // 실무에서는 아래 샘플 데이터 대신 전자정부프레임워크 URL을 transaction으로 호출합니다.
+  // this.transaction(
+  //   "searchMonitoring",
+  //   "/monitoring/selectLegacyMonitoring.do",
+  //   "",
+  //   "dsEquipment=output1 dsTrend=output2 dsAlarm=output3 dsInterfaceLog=output4 dsProcessResult=output5",
+  //   "plant=" + this.cboPlant.value + " line=" + this.cboLine.value + " state=" + this.cboState.value,
+  //   "fnCallback"
+  // );
+  this.fnLoadSampleData();
+  this.fnProcessLegacyData();
+  this.fnApplyFilter();
+  this.fnCalculateKpi();
+};
+
+this.fnCallback = function(serviceId, errorCode, errorMsg)
+{
+  if (errorCode < 0) {
+    alert("레거시 데이터 연동 실패: " + errorMsg);
+    return;
+  }
+
+  if (serviceId == "searchMonitoring") {
+    this.fnProcessLegacyData();
+    this.fnApplyFilter();
+    this.fnCalculateKpi();
+  }
+};
+
+this.fnLoadSampleData = function()
+{
+  this.dsEquipment.clearData();
+  this.dsEquipment.addRow();
+  this.dsEquipment.setColumn(0, "plant", "GEOJE-1");
+  this.dsEquipment.setColumn(0, "line", "A");
+  this.dsEquipment.setColumn(0, "eqId", "EQ-A-101");
+  this.dsEquipment.setColumn(0, "eqName", "절단기 1호");
+  this.dsEquipment.setColumn(0, "state", "정상");
+  this.dsEquipment.setColumn(0, "runRate", 94);
+  this.dsEquipment.setColumn(0, "output", 1280);
+  this.dsEquipment.setColumn(0, "defect", 8);
+  this.dsEquipment.setColumn(0, "collectedAt", "09:12:18");
+
+  this.dsEquipment.addRow();
+  this.dsEquipment.setColumn(1, "plant", "GEOJE-1");
+  this.dsEquipment.setColumn(1, "line", "A");
+  this.dsEquipment.setColumn(1, "eqId", "EQ-A-102");
+  this.dsEquipment.setColumn(1, "eqName", "용접 로봇 2호");
+  this.dsEquipment.setColumn(1, "state", "주의");
+  this.dsEquipment.setColumn(1, "runRate", 78);
+  this.dsEquipment.setColumn(1, "output", 990);
+  this.dsEquipment.setColumn(1, "defect", 21);
+  this.dsEquipment.setColumn(1, "collectedAt", "09:12:15");
+
+  this.dsEquipment.addRow();
+  this.dsEquipment.setColumn(2, "plant", "GEOJE-2");
+  this.dsEquipment.setColumn(2, "line", "A");
+  this.dsEquipment.setColumn(2, "eqId", "EQ-A-211");
+  this.dsEquipment.setColumn(2, "eqName", "크레인 센서");
+  this.dsEquipment.setColumn(2, "state", "정지");
+  this.dsEquipment.setColumn(2, "runRate", 0);
+  this.dsEquipment.setColumn(2, "output", 0);
+  this.dsEquipment.setColumn(2, "defect", 0);
+  this.dsEquipment.setColumn(2, "collectedAt", "09:09:40");
+
+  this.dsLineState.clearData();
+  this.dsLineState.addRow();
+  this.dsLineState.setColumn(0, "line", "A라인");
+  this.dsLineState.setColumn(0, "state", "주의");
+  this.dsLineState.setColumn(0, "runRate", "57.3%");
+  this.dsLineState.setColumn(0, "output", "2,270");
+
+  this.dsLineState.addRow();
+  this.dsLineState.setColumn(1, "line", "B라인");
+  this.dsLineState.setColumn(1, "state", "정상");
+  this.dsLineState.setColumn(1, "runRate", "91.0%");
+  this.dsLineState.setColumn(1, "output", "870");
+
+  this.dsLineState.addRow();
+  this.dsLineState.setColumn(2, "line", "C라인");
+  this.dsLineState.setColumn(2, "state", "주의");
+  this.dsLineState.setColumn(2, "runRate", "80.5%");
+  this.dsLineState.setColumn(2, "output", "1,420");
+
+  this.dsTrend.clearData();
+  var hours = ["06", "07", "08", "09", "10", "11", "12", "13"];
+  var outputs = [310, 520, 740, 880, 820, 940, 760, 910];
+  for (var i = 0; i < hours.length; i++) {
+    var row = this.dsTrend.addRow();
+    this.dsTrend.setColumn(row, "hour", hours[i]);
+    this.dsTrend.setColumn(row, "output", outputs[i]);
+  }
+
+  this.dsAlarm.clearData();
+  var alarmRow = this.dsAlarm.addRow();
+  this.dsAlarm.setColumn(alarmRow, "time", "09:09");
+  this.dsAlarm.setColumn(alarmRow, "level", "정지");
+  this.dsAlarm.setColumn(alarmRow, "title", "EQ-A-211 데이터 수집 중단");
+  this.dsAlarm.setColumn(alarmRow, "desc", "레거시 설비 게이트웨이 응답 없음");
+
+  this.dsInterfaceLog.clearData();
+  var logRow = this.dsInterfaceLog.addRow();
+  this.dsInterfaceLog.setColumn(logRow, "systemName", "MES");
+  this.dsInterfaceLog.setColumn(logRow, "interfaceType", "Oracle DB Link");
+  this.dsInterfaceLog.setColumn(logRow, "recordCount", 2418);
+  this.dsInterfaceLog.setColumn(logRow, "state", "정상");
+  this.dsInterfaceLog.setColumn(logRow, "lastSync", "2026-05-14 09:12:20");
+
+  logRow = this.dsInterfaceLog.addRow();
+  this.dsInterfaceLog.setColumn(logRow, "systemName", "ERP");
+  this.dsInterfaceLog.setColumn(logRow, "interfaceType", "Batch Table");
+  this.dsInterfaceLog.setColumn(logRow, "recordCount", 386);
+  this.dsInterfaceLog.setColumn(logRow, "state", "정상");
+  this.dsInterfaceLog.setColumn(logRow, "lastSync", "2026-05-14 09:10:02");
+
+  logRow = this.dsInterfaceLog.addRow();
+  this.dsInterfaceLog.setColumn(logRow, "systemName", "설비 Gateway");
+  this.dsInterfaceLog.setColumn(logRow, "interfaceType", "REST Adapter");
+  this.dsInterfaceLog.setColumn(logRow, "recordCount", 128);
+  this.dsInterfaceLog.setColumn(logRow, "state", "주의");
+  this.dsInterfaceLog.setColumn(logRow, "lastSync", "2026-05-14 09:09:40");
+
+  this.dsLegacyRaw.clearData();
+  var rawRow = this.dsLegacyRaw.addRow();
+  this.dsLegacyRaw.setColumn(rawRow, "sourceSystem", "MES");
+  this.dsLegacyRaw.setColumn(rawRow, "legacyKey", "PROD_ACT_20260514_0912");
+  this.dsLegacyRaw.setColumn(rawRow, "eqCode", "EQ-A-101");
+  this.dsLegacyRaw.setColumn(rawRow, "tagCode", "GOOD_QTY");
+  this.dsLegacyRaw.setColumn(rawRow, "rawValue", "1280");
+  this.dsLegacyRaw.setColumn(rawRow, "unit", "EA");
+  this.dsLegacyRaw.setColumn(rawRow, "quality", "GOOD");
+  this.dsLegacyRaw.setColumn(rawRow, "receivedAt", "09:12:20");
+  this.dsLegacyRaw.setColumn(rawRow, "mappedField", "dsEquipment.output");
+
+  rawRow = this.dsLegacyRaw.addRow();
+  this.dsLegacyRaw.setColumn(rawRow, "sourceSystem", "설비 Gateway");
+  this.dsLegacyRaw.setColumn(rawRow, "legacyKey", "PLC_A102_TEMP_0907");
+  this.dsLegacyRaw.setColumn(rawRow, "eqCode", "EQ-A-102");
+  this.dsLegacyRaw.setColumn(rawRow, "tagCode", "WELD_TEMP");
+  this.dsLegacyRaw.setColumn(rawRow, "rawValue", "87.4");
+  this.dsLegacyRaw.setColumn(rawRow, "unit", "C");
+  this.dsLegacyRaw.setColumn(rawRow, "quality", "WARN");
+  this.dsLegacyRaw.setColumn(rawRow, "receivedAt", "09:07:03");
+  this.dsLegacyRaw.setColumn(rawRow, "mappedField", "dsAlarm.title / dsEquipment.state");
+
+  rawRow = this.dsLegacyRaw.addRow();
+  this.dsLegacyRaw.setColumn(rawRow, "sourceSystem", "ERP");
+  this.dsLegacyRaw.setColumn(rawRow, "legacyKey", "WORK_ORDER_77821");
+  this.dsLegacyRaw.setColumn(rawRow, "eqCode", "EQ-B-201");
+  this.dsLegacyRaw.setColumn(rawRow, "tagCode", "PLAN_QTY");
+  this.dsLegacyRaw.setColumn(rawRow, "rawValue", "920");
+  this.dsLegacyRaw.setColumn(rawRow, "unit", "EA");
+  this.dsLegacyRaw.setColumn(rawRow, "quality", "GOOD");
+  this.dsLegacyRaw.setColumn(rawRow, "receivedAt", "09:10:02");
+  this.dsLegacyRaw.setColumn(rawRow, "mappedField", "생산 계획 대비 실적 계산");
+};
+
+this.fnProcessLegacyData = function()
+{
+  // 원천 데이터 수집 후 화면용 데이터로 정제/집계/판정하는 처리 로직 예시입니다.
+  var rawCount = 0;
+  for (var i = 0; i < this.dsLegacyRaw.getRowCount(); i++) {
+    rawCount++;
+  }
+
+  var equipmentCount = this.dsEquipment.getRowCount();
+  var alarmCount = 0;
+  for (var j = 0; j < equipmentCount; j++) {
+    var runRate = nexacro.toNumber(this.dsEquipment.getColumn(j, "runRate"));
+    var state = this.dsEquipment.getColumn(j, "state");
+    if (runRate < 80 || state != "정상") {
+      alarmCount++;
+    }
+  }
+
+  this.dsProcessResult.clearData();
+  var row = this.dsProcessResult.addRow();
+  this.dsProcessResult.setColumn(row, "stepName", "원천 수집");
+  this.dsProcessResult.setColumn(row, "inputCount", rawCount);
+  this.dsProcessResult.setColumn(row, "outputCount", rawCount);
+  this.dsProcessResult.setColumn(row, "result", "정상");
+  this.dsProcessResult.setColumn(row, "remark", "MES/ERP/설비 Gateway 수집");
+
+  row = this.dsProcessResult.addRow();
+  this.dsProcessResult.setColumn(row, "stepName", "데이터 정제");
+  this.dsProcessResult.setColumn(row, "inputCount", rawCount);
+  this.dsProcessResult.setColumn(row, "outputCount", equipmentCount);
+  this.dsProcessResult.setColumn(row, "result", "정상");
+  this.dsProcessResult.setColumn(row, "remark", "설비별 최신값 기준 병합");
+
+  row = this.dsProcessResult.addRow();
+  this.dsProcessResult.setColumn(row, "stepName", "임계치 판정");
+  this.dsProcessResult.setColumn(row, "inputCount", equipmentCount);
+  this.dsProcessResult.setColumn(row, "outputCount", alarmCount);
+  this.dsProcessResult.setColumn(row, "result", alarmCount > 0 ? "주의" : "정상");
+  this.dsProcessResult.setColumn(row, "remark", "가동률 80% 미만 또는 상태 이상");
+};
+
+this.fnApplyFilter = function()
+{
+  var filter = "";
+  if (this.cboPlant.value != "ALL") {
+    filter += "plant == '" + this.cboPlant.value + "'";
+  }
+  if (this.cboLine.value != "ALL") {
+    if (filter.length > 0) filter += " && ";
+    filter += "line == '" + this.cboLine.value + "'";
+  }
+  if (this.cboState.value != "ALL") {
+    if (filter.length > 0) filter += " && ";
+    filter += "state == '" + this.cboState.value + "'";
+  }
+  this.dsEquipment.filter(filter);
+};
+
+this.fnCalculateKpi = function()
+{
+  var count = this.dsEquipment.getRowCount();
+  var runSum = 0;
+  var outputSum = 0;
+  var defectSum = 0;
+  var alarmCount = 0;
+
+  for (var i = 0; i < count; i++) {
+    runSum += nexacro.toNumber(this.dsEquipment.getColumn(i, "runRate"));
+    outputSum += nexacro.toNumber(this.dsEquipment.getColumn(i, "output"));
+    defectSum += nexacro.toNumber(this.dsEquipment.getColumn(i, "defect"));
+    if (this.dsEquipment.getColumn(i, "state") != "정상") {
+      alarmCount++;
+    }
+  }
+
+  var runRate = count == 0 ? 0 : Math.round((runSum / count) * 10) / 10;
+  var defectRate = outputSum == 0 ? 0 : Math.round((defectSum / outputSum * 100) * 100) / 100;
+  this.staRunRateValue.set_text(runRate + "%");
+  this.staOutputValue.set_text(outputSum);
+  this.staDefectValue.set_text(defectRate + "%");
+  this.staAlarmValue.set_text(alarmCount);
+};
+
+this.gfn_today = function()
+{
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = ("0" + (date.getMonth() + 1)).slice(-2);
+  var day = ("0" + date.getDate()).slice(-2);
+  return "" + year + month + day;
+};
+    ]]></Script>
+  </Form>
+</FDL>
