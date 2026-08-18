@@ -1,4 +1,4 @@
-# Manufacturing Monitoring XFDL Prototype
+# Nexacro Manufacturing Monitoring Frontend
 
 Nexacro-style manufacturing monitoring prototype for legacy data integration and visualization.
 
@@ -27,3 +27,13 @@ http://127.0.0.1:4589/build/
 
 This repository includes a GitHub Actions workflow that deploys the `build/` directory to GitHub Pages.
 
+
+## Portfolio URL
+
+After deployment:
+
+```text
+https://programmer119.github.io/nexacro/
+```
+
+GitHub topic/keyword: `nexacro`
