@@ -1,0 +1,42 @@
+name: SiteHub integrate p15 once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sitehub-integrate-once.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch initial HTML
+        shell: python
+        env:
+          SITEHUB_PROJECT: p15
+          PUBLIC_URL: https://programmer119.github.io/nexacro/
+          DESCRIPTION: 제조 설비 모니터링 Nexacro 렌더러 데모.
+        run: |
+          from pathlib import Path
+          import os,re,html
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          if 'data-sitehub-project="'+os.environ['SITEHUB_PROJECT']+'"' in s: raise SystemExit(0)
+          title=re.search(r'<title[^>]*>(.*?)</title>',s,re.I|re.S)
+          title=html.unescape(re.sub(r'<[^>]+>','',title.group(1)).strip()) if title else os.environ['SITEHUB_PROJECT']
+          e=lambda x:html.escape(x,quote=True)
+          url=os.environ['PUBLIC_URL']; desc=os.environ['DESCRIPTION']; img='https://sitehub.suaveforge.com/assets/namecard-default.png'
+          block=f'''\n  <!-- SITEHUB-BEGIN -->\n  <meta name="description" content="{e(desc)}">\n  <link rel="canonical" href="{e(url)}">\n  <meta property="og:title" content="{e(title)}">\n  <meta property="og:description" content="{e(desc)}">\n  <meta property="og:image" content="{img}">\n  <meta property="og:url" content="{e(url)}">\n  <meta property="og:site_name" content="SuaveForge">\n  <meta name="twitter:card" content="summary_large_image">\n  <script async src="https://sitehub.suaveforge.com/analytics-loader.js" data-sitehub-project="{os.environ['SITEHUB_PROJECT']}"></script>\n  <!-- SITEHUB-END -->\n'''
+          s,n=re.subn(r'</head\s*>',block+'</head>',s,count=1,flags=re.I)
+          if n!=1: raise SystemExit('head close missing')
+          p.write_text(s,encoding='utf-8')
+      - name: Validate and commit
+        run: |
+          set -Eeuo pipefail
+          grep -q 'data-sitehub-project="p15"' index.html
+          grep -q 'property="og:image"' index.html
+          grep -q 'rel="canonical"' index.html
+          git config user.name 'SuaveForge SiteHub'
+          git config user.email '53187583+programmer119@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Integrate SiteHub p15'
+          git push
