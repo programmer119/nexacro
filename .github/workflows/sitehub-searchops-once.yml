@@ -1,0 +1,28 @@
+name: SiteHub SearchOps p15 once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sitehub-searchops-once.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Apply pinned SearchOps adapter
+        env:
+          PROJECT_ID: p15
+          PUBLIC_URL: https://programmer119.github.io/nexacro/
+          PROJECT_NAME: Nexacro XFDL 분석·브라우저 렌더러
+          DESCRIPTION: Nexacro XFDL 화면을 브라우저에서 분석하고 제조 설비 모니터링 UI를 확인하는 웹 데모입니다.
+          INDEX_PATH: build/index.html
+          SITEMAP_PATH: build/sitemap.xml
+        run: |
+          set -Eeuo pipefail
+          curl -fsSL https://raw.githubusercontent.com/suaveforge/sitehub-deploy/949cbc636e900cbd3504c4a4ecfcc295511c6d70/searchops/static-page-adapter.py -o /tmp/sitehub-searchops.py
+          python /tmp/sitehub-searchops.py
+          git config user.name 'SuaveForge SiteHub'
+          git config user.email '53187583+programmer119@users.noreply.github.com'
+          git add build/index.html build/sitemap.xml
+          if ! git diff --cached --quiet; then git commit -m 'Apply SiteHub SearchOps p15'; git push origin HEAD:main; fi
